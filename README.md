@@ -12,11 +12,24 @@ For this project, you will train an agent to navigate (and collect bananas!) in 
 
 A reward of +1 is provided for collecting a yellow banana, and a reward of -1 is provided for collecting a blue banana.  Thus, the goal of your agent is to collect as many yellow bananas as possible while avoiding blue bananas.  
 
-The state space has 37 dimensions and contains the agent's velocity, along with ray-based perception of objects around agent's forward direction.  Given this information, the agent has to learn how to best select actions.  Four discrete actions are available, corresponding to:
-- **`0`** - move forward.
-- **`1`** - move backward.
-- **`2`** - turn left.
-- **`3`** - turn right.
+* The state space has 37 dimensions and contains the agent's velocity, along with ray-based perception of objects around agent's forward direction.  Given this information, the agent has to learn how to best select actions.  
+    * state space has 37 dims. [0-34] for perception, [35,36] for velocity
+    * the agent has 7 perception ray, each is a 5-dims vector
+    * 7 rays projecting from the agent at the following angles (and returned in this order): [20, 90, 160, 45, 135, 70, 110]
+    * where 90 is directly in front of the agent
+    * Each ray is projected into the scene. If it encounters one of four detectable objects the value at that position in the array is set to 1. 
+    * Finally there is a distance measure which is a fraction of the ray length. something like this [Banana, Wall, BadBanana, Agent, Distance]
+    * For example [0, 1, 1, 0, 0.2] means there is a BadBanana detected 20% of the way along the ray and a wall behind it.
+    * Velocity of Agent (2)
+        * Left/right velocity (usually near 0)
+        * Forward/backward velocity (0-11.2)
+    * [discussion](https://knowledge.udacity.com/questions/22697) on udacity
+    * [discussion](https://github.com/Unity-Technologies/ml-agents/issues/1134) on unity banana environment
+* Four discrete actions are available, corresponding to:
+    - **`0`** - move forward.
+    - **`1`** - move backward.
+    - **`2`** - turn left.
+    - **`3`** - turn right.
 
 The task is episodic, and in order to solve the environment, your agent must get an average score of +13 over 100 consecutive episodes.
 
