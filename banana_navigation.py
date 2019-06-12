@@ -67,7 +67,7 @@ for i_episode in range(N_EPISODES):
             print("Episode {}, Score: {}, global steps: {}".format(i_episode, score, agent.learn_step_counter))
             break
     with open(log_file_name, 'a') as file:
-        info = "Episode {}, Score: {}, global steps: {}".format(i_episode, score, agent.learn_step_counter)
+        info = "Episode {}, Score: {}, global steps: {}\n".format(i_episode, score, agent.learn_step_counter)
         file.write(info)
 
     if i_episode % 10 == 0:
