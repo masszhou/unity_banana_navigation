@@ -4,11 +4,10 @@ import time
 
 from DQN_tf import DeepQNetwork
 
-from DQN_torch import DeepQNetwork as DeepQNetwork_torch
+#from DQN_torch import DeepQNetwork as DeepQNetwork_torch
 
 import os
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'  # or any '0,1'
-
 
 env = UnityEnvironment(file_name="./Banana_Linux/Banana.x86_64", no_graphics=True)
 
@@ -39,15 +38,22 @@ print('States have length:', state_size)
 #                      n_features=state_size,
 #                      learning_rate=0.01)
 
-agent = DeepQNetwork_torch(state_size=state_size, action_size=action_size, seed=42)
+# agent = DeepQNetwork_torch(state_size=state_size, action_size=action_size, seed=42)
+agent = DeepQNetwork(n_features=state_size, 
+                     n_actions=action_size, 
+                     memory_size=int(1e5),
+                     batch_size=64,
+                     gamma=0.99,
+                     learning_rate=0.0005,
+                     update_every=4)
 
 N_EPISODES = 50000
 scores_log = []
 
-# try:
-#     agent.restore()
-# except IOError:
-#     print("new training")
+try:
+    agent.restore()
+except ValueError:
+    print("new training")
 
 
 timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -85,7 +91,7 @@ for i_episode in range(N_EPISODES):
         info = "Episode {}, Score: {}, eps: {}\n".format(i_episode, score, eps)
         file.write(info)
 
-    # if i_episode % 10 == 0:
-    #     agent.save()
+    if i_episode % 50 == 0:
+        agent.save()
 
 env.close()

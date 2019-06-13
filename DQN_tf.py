@@ -137,7 +137,7 @@ class DeepQNetwork:
             # self.train_op = tf.train.RMSPropOptimizer(self.lr).minimize(self.loss)
             self.train_op = tf.train.AdamOptimizer(learning_rate=self.lr).minimize(self.loss, global_step=self.global_step)
 
-    def choose_action(self, state, eps):
+    def act(self, state, eps):
         s = np.expand_dims(state, axis=0)
         if np.random.uniform() < eps:
             action = np.random.randint(0, self.n_actions)
@@ -189,6 +189,8 @@ class DeepQNetwork:
 if __name__ == "__main__":
     from tqdm import tqdm
     import gym
+    import os
+    os.environ['CUDA_VISIBLE_DEVICES'] = '0'  # or any '0,1'
 
     env = gym.make('CartPole-v0')
     # https://github.com/openai/gym/wiki/CartPole-v0
@@ -206,7 +208,7 @@ if __name__ == "__main__":
                          n_features=env.observation_space.shape[0],
                          learning_rate=0.01)
 
-    N_EPISODES = 5000
+    N_EPISODES = 100
     scores_log = []
     pbar = tqdm(total=N_EPISODES)
 
@@ -220,12 +222,9 @@ if __name__ == "__main__":
         state = env.reset()
         steps = 0
         while True:
-            env.render()
-
+            #env.render()
             action = agent.choose_action(state, eps)
-
             next_state, reward, done, info = env.step(action)
-
             # the smaller theta and closer to center the better
             x, x_dot, theta, theta_dot = next_state
             # smaller reward, when not in the central
@@ -245,17 +244,13 @@ if __name__ == "__main__":
             eps = max(eps_end, eps_decay * eps)
             if done:
                 break
+            if steps > 2000:
+                # sucessful episode
+                break
 
         scores_log.append(steps)
-        pbar.set_description('episode {}, epsilon {}'.format(i_episode, round(agent.epsilon, 2)))
+        pbar.set_description('episode {}, epsilon {}'.format(i_episode, round(eps, 2)))
         pbar.set_postfix(steps=steps)
         pbar.update()
 
     pbar.close()
-
-    import matplotlib.pyplot as plt
-
-    plt.plot(np.arange(len(scores_log)), scores_log)
-    plt.ylabel('Score')
-    plt.xlabel('Episodes')
-    plt.show()
