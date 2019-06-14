@@ -59,6 +59,35 @@ def train_agent(agent,
             agent.save()
 
 
+def test_agent(agent, env):
+    brain_name = env.brain_names[0]
+
+    try:
+        agent.restore()
+        print("model restored from global step {}".format(agent.learn_step_counter))
+    except ValueError:
+        print("failed to load")
+
+    for i_episode in range(100):
+
+        env_info = env.reset(train_mode=False)[brain_name]  # reset the environment
+        state = env_info.vector_observations[0]  # get the current state
+        score = 0  # initialize the score
+        while True:
+            action = agent.act(state, eps=0.0)
+
+            env_info = env.step(action)[brain_name]  # send the action to the environment
+            next_state = env_info.vector_observations[0]  # get the next state
+            reward = env_info.rewards[0]  # get the reward
+            done = env_info.local_done[0]  # see if episode has finished
+
+            score += reward  # update the score
+            state = next_state  # roll over the state to next time step
+            if done:  # exit loop if episode finished
+                print("Episode {}, Score: {}".format(i_episode, score))
+                break
+
+
 if __name__ == "__main__":
     # env = UnityEnvironment(file_name="./Banana_Linux/Banana.x86_64", no_graphics=True)
     env = UnityEnvironment(file_name="./Banana_Linux/Banana.x86_64")
@@ -95,5 +124,6 @@ if __name__ == "__main__":
                          learning_rate=0.0005,
                          update_every=4)
 
-    train_agent(agent, env)
+    # train_agent(agent, env)
+    test_agent(agent, env)
     env.close()
