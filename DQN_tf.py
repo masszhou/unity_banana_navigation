@@ -77,12 +77,12 @@ class DeepQNetwork:
         b_initializer = tf.constant_initializer(0.1)
 
         with tf.variable_scope("eval_net") as scope:
-            eval_net = tf.keras.layers.Dense(20,
+            eval_net = tf.keras.layers.Dense(64,
                                              activation=tf.keras.activations.relu,
                                              kernel_initializer=w_initializer,
                                              bias_initializer=b_initializer,
                                              name="dense1")(self.s)
-            eval_net = tf.keras.layers.Dense(20,
+            eval_net = tf.keras.layers.Dense(64,
                                              activation=tf.keras.activations.relu,
                                              kernel_initializer=w_initializer,
                                              bias_initializer=b_initializer,
@@ -100,12 +100,12 @@ class DeepQNetwork:
             self.endpoints["Q_eval_wrt_a"] = tf.gather_nd(self.endpoints["Q_eval"], indices=a_indices)  # shape=(None, )
 
         with tf.variable_scope("target_net") as scope:
-            target_net = tf.keras.layers.Dense(20,
+            target_net = tf.keras.layers.Dense(64,
                                                activation=tf.keras.activations.relu,
                                                kernel_initializer=w_initializer,
                                                bias_initializer=b_initializer,
                                                name="dense1")(self.s_next)
-            target_net = tf.keras.layers.Dense(20,
+            target_net = tf.keras.layers.Dense(64,
                                                activation=tf.keras.activations.relu,
                                                kernel_initializer=w_initializer,
                                                bias_initializer=b_initializer,
