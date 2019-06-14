@@ -49,13 +49,12 @@ class DeepQNetwork:
         self.lr = learning_rate
 
         self.gamma = gamma  # reward discounter
-
         self.update_every = update_every
 
         self.memory_size = memory_size
         self.batch_size = batch_size
 
-        # initialize zero memory [s, a, r, s_]
+        # initialize zero memory [s, a, r, s_, done]
         self.memory = deque(maxlen=self.memory_size)
 
         # total learning step
@@ -170,7 +169,7 @@ class DeepQNetwork:
         # check to replace target parameters
         # in cartpole-v0 experiment, if replace too frequent,
         # the convergence will be not stable. sometime converge, sometime not
-        if self.learn_step_counter % 100 == 0:
+        if self.learn_step_counter % self.update_every == 0:
             self.sess.run(self.target_replace_op)
 
         sample_index = np.random.choice(range(memory_size), size=self.batch_size)  # replace = False
