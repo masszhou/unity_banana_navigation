@@ -224,7 +224,8 @@ if __name__ == "__main__":
 
     agent = DeepQNetwork(n_actions=env.action_space.n,
                          n_features=env.observation_space.shape[0],
-                         learning_rate=0.01)
+                         learning_rate=0.01,
+                         update_every=100)
     # debug_print(sess=agent.sess)
     # agent.restore()
     # print("----------")
@@ -243,7 +244,7 @@ if __name__ == "__main__":
         state = env.reset()
         steps = 0
         while True:
-            #env.render()
+            env.render()
             action = agent.act(state, eps)
             next_state, reward, done, info = env.step(action)
             # the smaller theta and closer to center the better
@@ -275,6 +276,7 @@ if __name__ == "__main__":
                                                                         round(eps, 2),
                                                                         agent.learn_step_counter,
                                                                         steps))
-        debug_print(sess=agent.sess)
+        # debug_print(sess=agent.sess)
 
-    agent.save()
+    # agent.save()
+    env.close()
