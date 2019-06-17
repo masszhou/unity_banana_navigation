@@ -2,8 +2,8 @@ from unityagents import UnityEnvironment
 import numpy as np
 import time
 
-from DQN_tf import DeepQNetwork
-# from DQN_torch import DeepQNetwork as DeepQNetwork_torch
+from DQN_tf import DeepQNetwork as DeepQNetwork_tf
+from DQN_torch import DeepQNetwork as DeepQNetwork_torch
 
 import os
 
@@ -19,14 +19,14 @@ def train_agent(agent,
     # get the default brain
     brain_name = env.brain_names[0]
 
-    try:
-        agent.restore()
-        print("model restored from global step {}".format(agent.learn_step_counter))
-    except ValueError:
-        print("new training")
+    # try:
+    #     agent.restore()
+    #     print("model restored from global step {}".format(agent.learn_step_counter))
+    # except ValueError:
+    #     print("new training")
 
     timestr = time.strftime("%Y%m%d-%H%M%S")
-    log_file_name = "./models/DQN_train_log-" + timestr + ".csv"
+    log_file_name = "./models/DQN_torch_train_log-" + timestr + ".csv"
 
     eps = eps_start
     for i_episode in range(n_episodes):
@@ -74,7 +74,7 @@ def test_agent(agent, env):
         state = env_info.vector_observations[0]  # get the current state
         score = 0  # initialize the score
         while True:
-            action = agent.act(state, eps=0.0)
+            action = agent.act(state, eps=0.01)
 
             env_info = env.step(action)[brain_name]  # send the action to the environment
             next_state = env_info.vector_observations[0]  # get the next state
@@ -101,29 +101,26 @@ if __name__ == "__main__":
     # ---------------------------
     # reset the environment
     env_info = env.reset(train_mode=True)[brain_name]
-
-    # # number of agents in the environment
-    # print('Number of agents:', len(env_info.agents))
-
-    # number of actions
     action_size = brain.vector_action_space_size
-    # print('Number of actions:', action_size)
-
-    # examine the state space
     state = env_info.vector_observations[0]
-    # print('States look like:', state)
     state_size = len(state)
-    # print('States have length:', state_size)
 
-    # agent = DeepQNetwork_torch(state_size=state_size, action_size=action_size, seed=42)
-    agent = DeepQNetwork(n_features=state_size,
-                         n_actions=action_size,
-                         memory_size=int(1e5),
-                         batch_size=64,
-                         gamma=0.99,
-                         learning_rate=0.0005,
-                         update_every=4)
+    # agent = DeepQNetwork_tf(n_features=state_size,
+    #                         n_actions=action_size,
+    #                         memory_size=int(1e5),
+    #                         batch_size=64,
+    #                         gamma=0.99,
+    #                         learning_rate=0.0005,
+    #                         update_every=100)
 
-    # train_agent(agent, env)
-    test_agent(agent, env)
+    agent = DeepQNetwork_torch(state_size=state_size,
+                               action_size=action_size,
+                               memory_size=int(1e5),
+                               batch_size=64,
+                               gamma=0.99,
+                               learning_rate=0.0005,
+                               update_every=100)
+
+    train_agent(agent, env)
+    # test_agent(agent, env)
     env.close()
