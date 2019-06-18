@@ -121,6 +121,6 @@ if __name__ == "__main__":
                                learning_rate=0.0005,
                                update_every=100)
 
-    train_agent(agent, env)
-    # test_agent(agent, env)
+    # train_agent(agent, env)
+    test_agent(agent, env)
     env.close()
