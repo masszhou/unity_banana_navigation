@@ -68,6 +68,7 @@ def test_agent(agent, env):
     except ValueError:
         print("failed to load")
 
+    score_logger = []
     for i_episode in range(100):
 
         env_info = env.reset(train_mode=False)[brain_name]  # reset the environment
@@ -86,6 +87,14 @@ def test_agent(agent, env):
             if done:  # exit loop if episode finished
                 print("Episode {}, Score: {}".format(i_episode, score))
                 break
+
+        score_logger.append(score)
+
+    import matplotlib.pyplot as plt
+    plt.plot(np.arange(len(score_logger)), score_logger)
+    plt.ylabel('score')
+    plt.xlabel('episode')
+    plt.show()
 
 
 if __name__ == "__main__":
