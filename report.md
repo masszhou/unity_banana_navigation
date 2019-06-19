@@ -156,10 +156,6 @@ net = dense(64, action_size)(net)
 
 * the network capacity is important, e.g. layers and neurons. The network capacity can be interpreted as Q-table dimension. If the task is complex, then we need a deeper network to fit.
 
-* Double DQN is designed to solve Q-value explode.
-
-* Prioritized Experience Replay can improve performance of sparse problem.
-
 * the reward system or design is one of the most important part in RL.
 
 * here is the evaluation runs from my model
@@ -174,6 +170,11 @@ net = dense(64, action_size)(net)
 $ python banana_navigation.py
 ```
 
+# 6. future works
+* Double DQN is designed to solve Q-value explode.
+
+* Prioritized Experience Replay can improve performance of sparse problem.
+* 
 # References
 * Udactiy Deep Reinforcement Learning Nanodegree
 * Udacity Reinforcement Learning by Prof. Charles Isbell and Prof. Michael Littman
