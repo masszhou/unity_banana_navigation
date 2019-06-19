@@ -17,7 +17,6 @@ $$
   * $\gamma$ is **Discount Rate**
 
 
-
 ### 1.2 State Value Function
 * definition
 $$
@@ -36,7 +35,7 @@ $$
 $$
 q_{\pi}(s,a)=\mathop{\mathbb{E}}[G_t|S_t=s, A_t=a]
 $$
-* read: the cumulative rewards from state $s_t$ when take action $a_t$ and subsequently following policy $\pi$
+* read: the cumulative return from state $s$ when take action $a$ and subsequently following policy $\pi$
 * a bridge between state value, and action, policy
 
 ### 1.4 Bellman Equation
@@ -85,17 +84,18 @@ $$
 
 ### 2.2 Contraction Mappings
 * Bellman operator is a contraction mapping. (a lot of read... if I ask why. and I asked)
-* $v_{\pi}$ and $v_∗$ are unique fixed points. By repeatedly applying $\mathcal{T}^{\pi}$ and $\mathcal{T}^*$ they will converge to respectively
+* $v_{\pi}$ and $v_{\ast}$ are unique fixed points. By repeatedly applying $\mathcal{T}^{\pi}$ and $\mathcal{T}^*$ they will converge to respectively
 $$
-\begin{eqnarray}
-\lim_{k\rightarrow\infty}(\mathcal{T}^{\pi})^kv&=&v_{\pi} \\
-\lim_{k\rightarrow\infty}(\mathcal{T}^*)^kv&=&v_*
-\end{eqnarray}
+\begin{aligned} 
+\lim_{k\rightarrow\infty}(\mathcal{T}^{\pi})^kv&=v_{\pi} \\
+\lim_{k\rightarrow\infty}(\mathcal{T}^{\ast})^kv&=v_{\ast}
+\end{aligned}
 $$
 
 ### 2.3 Reference for this section
 * [What is the Bellman operator in reinforcement learning?](https://ai.stackexchange.com/questions/11057/what-is-the-bellman-operator-in-reinforcement-learning)
 * [How Does Value-Based Reinforcement Learning Find the Optimal Policy?](https://runzhe-yang.science/2017-10-04-contraction/)
+
 
 # 3. Q-Learning
 * also called maximum SARS
@@ -113,6 +113,7 @@ $$
 ### 3.2 Temporal Difference Learning
 * learning in time, not until episode end.
 * I will finished this explaination later. I wish the explanaion intuitive but at the same time mathmatical reasonable.
+
 
 # 4. Deep Q Network
 * use neural network to fit high dimensional Q-table
@@ -132,12 +133,12 @@ $$
 $$
 * in the view of temporal difference, we redefine the optimization problem within a small interval, like
 $$
-\min_{\text{policy}} ||\text{policy_net} - \text{target_net}||
+\min_{\text{policy}} \vert\vert\text{policynet} - \text{targetnet}\vert\vert
 $$
 * so we define two networks
   * one policy network (also called as evaluation network)
   * one target network
-* we iterative update policy net to minimize $||\text{policy_net} - \text{target_net}||$ by training neural network.
+* we iterative update policy net to minimize $||\text{policynet} - \text{targetnet}||$ by training neural network.
 * and periodically copy policy net to target net, due to temporal difference learning
 
 ### 4.2 Layers
