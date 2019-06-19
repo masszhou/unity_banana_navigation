@@ -23,7 +23,7 @@ $$
 $$
 v_{\pi}(s)=\mathop{\mathbb{E}}[G_t|S_t=s]
 $$
-* read: the cumulative rewards from state $s_t$ following policy $\pi$
+* read: the expected cumulative return from state $s$ following policy $\pi$
 * consider all following rewards are known in a finite episode
 * can be used to evaluate policy, e.g.
 $$
@@ -37,7 +37,7 @@ $$
 q_{\pi}(s,a)=\mathop{\mathbb{E}}[G_t|S_t=s, A_t=a]
 $$
 * read: the cumulative rewards from state $s_t$ when take action $a_t$ and subsequently following policy $\pi$
-* a bridge between state value and action
+* a bridge between state value, and action, policy
 
 ### 1.4 Bellman Equation
 * Redefine state value function and action value function in an iterative way
@@ -103,11 +103,11 @@ $$
 * off-policy learning, use max(Q_next) to learn instead of using orignial policy $\pi$
 * update Q-table $q_{\pi}$ with $(s_t, a_t, r_{t+1}, s_{t+1})$,
 $$
-q_{\pi}(s_t, a_t) = q_{\pi}(s_t, a_t) + \alpha * (r_{t+1} + \gamma * \max q_{\pi}(s_{t+1}) - q_{\pi}(s_t, a_t))
+q_{\pi}(s_t, a_t) = q_{\pi}(s_t, a_t) + \alpha  (r_{t+1} + \gamma \max q_{\pi}(s_{t+1}) - q_{\pi}(s_t, a_t))
 $$
 * or can be rewritten like soft-update form
 $$
-q_{\pi}(s_t, a_t) = (1-\alpha)q_{\pi}(s_t, a_t) + \alpha * (r_{t+1} + \gamma * \max q_{\pi}(s_{t+1}))
+q_{\pi}(s_t, a_t) = (1-\alpha)q_{\pi}(s_t, a_t) + \alpha (r_{t+1} + \gamma \max q_{\pi}(s_{t+1}))
 $$
 
 ### 3.2 Temporal Difference Learning
@@ -120,7 +120,7 @@ $$
 ### 4.1 Problem definition
 * recall Q-learning
 $$
-q_{\pi}(s_t, a_t) = (1-\alpha)q_{\pi}(s_t, a_t) + \alpha * (r_{t+1} + \gamma * \max q_{\pi}(s_{t+1}))
+q_{\pi}(s_t, a_t) = (1-\alpha)q_{\pi}(s_t, a_t) + \alpha (r_{t+1} + \gamma \max q_{\pi}(s_{t+1}))
 $$
 * considering both contraction mappings and temporal difference.
   * let $q_{\pi}(s_t, a_t)$ be the temporal optimal state value
@@ -137,7 +137,7 @@ $$
 * so we define two networks
   * one policy network (also called as evaluation network)
   * one target network
-* we iterative update policy net to minimize $||\text{policy_net} - \text{target_net}||$ by training neural net work.
+* we iterative update policy net to minimize $||\text{policy_net} - \text{target_net}||$ by training neural network.
 * and periodically copy policy net to target net, due to temporal difference learning
 
 ### 4.2 Layers
