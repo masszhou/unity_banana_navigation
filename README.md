@@ -70,36 +70,35 @@ The task is episodic, and in order to solve the environment, your agent must get
 <img src="./imgs/RL_model.png"  width="600" />
 
 * Reinforcement Learning is about learning **Policy** from the interaction between agent and environment
-* A **Policy** function, written like $p=\pi(s,a)$, describes how the agent act. It reads as the probability of agent to take action $a$ at state $s$.
+* A **Policy** function, written like p=&pi;(s,a), describes how the agent act. It reads as the probability of agent to take action $a$ at state $s$.
 * The interaction of agent and environment can be described as a sequence of 
-  * $S_t, A_t, R_{t+1}, S_{t+1}, A_{t+1}, R_{t+2}, S_{t+2}, \dots $
-  * It read as the agent at **State** $S_t$ made an **Action** $A_t$, the environments gave a instance feedback **Reward** $R_{t+1}$ and subsequent **State** $S_{t+1}$ based on **State** $S_t$ and the **Action** $A_t$.
-* Most of the time, we are more interested for maximizing cumulative future rewards, such as win a game at last. So we denote cumulative rewards at time step $t$ as 
-<a href="https://www.codecogs.com/eqnedit.php?latex=G_t=R_{t&plus;1}&plus;\gamma&space;R_{t&plus;2}&space;&plus;&space;\gamma^2&space;R_{t&plus;3}&space;\dots&space;=&space;\sum^{\infty}_{k=0}\gamma^k&space;R_{t&plus;k&plus;1},&space;r\in[0,&space;1]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G_t=R_{t&plus;1}&plus;\gamma&space;R_{t&plus;2}&space;&plus;&space;\gamma^2&space;R_{t&plus;3}&space;\dots&space;=&space;\sum^{\infty}_{k=0}\gamma^k&space;R_{t&plus;k&plus;1},&space;r\in[0,&space;1]" title="G_t=R_{t+1}+\gamma R_{t+2} + \gamma^2 R_{t+3} \dots = \sum^{\infty}_{k=0}\gamma^k R_{t+k+1}, r\in[0, 1]" /></a>
-
-  * $G_t$ is also called **Return** at time step $t$
-  * $\gamma$ is **Discount Rate**
-
+  * S<sub>t</sub>, A<sub>t</sub>, R<sub>t+1</sub>, S<sub>t+1</sub>, A<sub>t+1</sub>, R<sub>t+2</sub>, S<sub>t+2</sub>, ...
+  * It read as the agent at **State** S<sub>t</sub> made an **Action** A<sub>t</sub>, the environments gave a instance feedback **Reward** R<sub>t+1</sub> and subsequent **State** S<sub>t+1</sub> based on **State** S<sub>t</sub> and the **Action** A<sub>t</sub>.
+* Most of the time, we are more interested for maximizing cumulative future rewards, such as win a game at last. So we denote cumulative rewards at time step t as
+$$
+G_t=R_{t+1}+\gamma R_{t+2} + \gamma^2 R_{t+3} \dots = \sum^{\infty}_{k=0}\gamma^k R_{t+k+1}, r\in[0, 1]
+$$
+  * G<sub>t</sub> is also called **Return** at time step $t$
+  * &gamma; is **Discount Rate**
 
 ## 3.1 State Value Function
 * definition
 $$
 v_{\pi}(s)=\mathop{\mathbb{E}}[G_t|S_t=s]
 $$
-* read: the expected cumulative return from state $s$ following policy $\pi$
+* read: the expected cumulative return from state $s$ following policy &pi;
 * consider all following rewards are known in a finite episode
 * can be used to evaluate policy, e.g.
 $$
 \pi'>\pi \iff v_{\pi'}(s)\geq v_{\pi}(s), \forall s\in \mathcal{S}
 $$
-  * $\pi'$ is better than $\pi$, when $v_{\pi'}(s)\geq v_{\pi}(s), \forall s\in \mathcal{S}$
 
 ## 3.2 Action Value Function
 * definition
 $$
 q_{\pi}(s,a)=\mathop{\mathbb{E}}[G_t|S_t=s, A_t=a]
 $$
-* read: the cumulative return from state $s$ when take action $a$ and subsequently following policy $\pi$
+* read: the cumulative return from state $s$ when take action $a$ and subsequently following policy &pi;
 * a bridge between state value, and action, policy
 
 ## 3.3 Bellman Equation
@@ -109,14 +108,18 @@ $$
 $$
 v_{\pi}(s)=\mathop{\mathbb{E}}[R_{t+1}+\gamma v_{\pi}(s_{t+1})|S_t=s] 
 $$
-  * or use general symbol $s, s'$ stands for two states. expend Bellman expectation equation, then we have
+  * or use general symbol s, s' stands for two states. expend Bellman expectation equation, then we have
 $$
 v_{\pi}(s)=R(s,\pi(s))+\gamma \sum_{s'\in \mathcal{S}} p(s'|s,\pi(s)) v_{\pi}(s')
 $$
-  * or denote $\mathcal{P}^{\pi}_{ss'}=p(S_{t+1}=s' | S_t=s, A_t=\pi(s))$, which is more compact for matrix form
-  $$
-  v_{\pi}(s)=R^{\pi}_s+\gamma \sum_{s,s'\in \mathcal{S}}  \mathcal{P}^{\pi}_{ss'} v_{\pi}(s')
-  $$
+  * or denote 
+$$
+\mathcal{P}^{\pi}_{ss'}=p(S_{t+1}=s' | S_t=s, A_t=\pi(s))
+$$
+which is more compact for matrix form
+$$
+v_{\pi}(s)=R^{\pi}_s+\gamma \sum_{s,s'\in \mathcal{S}}  \mathcal{P}^{\pi}_{ss'} v_{\pi}(s')
+$$
 * Bellman optimal equation
 $$
 v_*(s)=\max_{a\in\mathcal{A}}\mathop \lbrace R^a_s + \gamma \sum_{s,s'\in \mathcal{S}}\mathcal{P}^a_{ss'}v_*(s') \rbrace
@@ -136,19 +139,19 @@ $$
 $$
 v_{\pi}=\mathcal{R}^{\pi}+\gamma \mathcal{P}^{\pi}v_{\pi}
 $$
-* define Bellman expectation operator $\mathcal{T}^{\pi}:\mathbb{R}^n \rightarrow \mathbb{R}^n$ as 
+* define Bellman expectation operator 
 $$
-\mathcal{T}^{\pi}v_{\pi} = \mathcal{R}^{\pi}+\gamma \mathcal{P}^{\pi}v_{\pi}
+\mathcal{T}^{\pi}:\mathbb{R}^n \rightarrow \mathbb{R}^n, \mathcal{T}^{\pi}v_{\pi} = \mathcal{R}^{\pi}+\gamma \mathcal{P}^{\pi}v_{\pi}
 $$
 
 * similarly we have Bellman optimality operator
 $$
-\mathcal{T}^*v = \max_{a\in\mathcal{A}}(\mathcal{R}^a+\gamma\mathcal{P}^av)
+\mathcal{T}^{\ast}:\mathbb{R}^n \rightarrow \mathbb{R}^n, \mathcal{T}^*v = \max_{a\in\mathcal{A}}(\mathcal{R}^a+\gamma\mathcal{P}^av)
 $$
 
 ## 4.2 Contraction Mappings
 * Bellman operator is a contraction mapping. (a lot of read... if I ask why. and I asked)
-* $v_{\pi}$ and $v_{\ast}$ are unique fixed points. By repeatedly applying $\mathcal{T}^{\pi}$ and $\mathcal{T}^*$ they will converge to respectively
+* v<sub>&pi;</sub>  and v<sub>*</sub>  are unique fixed points. By repeatedly applying T<sup>&pi;</sup> and T<sup>opt</sup> they will converge to respectively
 $$
 \begin{aligned} 
 \lim_{k\rightarrow\infty}(\mathcal{T}^{\pi})^kv&=v_{\pi} \\
@@ -164,8 +167,8 @@ $$
 # 5. Q-Learning
 * also called maximum SARS
 * Asynchronous value iteration
-* off-policy learning, use max(Q_next) to learn instead of using orignial policy $\pi$
-* update Q-table $q_{\pi}$ with $(s_t, a_t, r_{t+1}, s_{t+1})$,
+* off-policy learning, use max(Q_next) to learn instead of using orignial policy &pi;
+* update Q-table q<sub>&pi;</sub> with (s<sub>t</sub>, a<sub>t</sub>, r<sub>t+1</sub>, s<sub>t+1</sub>),
 $$
 q_{\pi}(s_t, a_t) = q_{\pi}(s_t, a_t) + \alpha  (r_{t+1} + \gamma \max q_{\pi}(s_{t+1}) - q_{\pi}(s_t, a_t))
 $$
@@ -188,9 +191,9 @@ $$
 q_{\pi}(s_t, a_t) = (1-\alpha)q_{\pi}(s_t, a_t) + \alpha (r_{t+1} + \gamma \max q_{\pi}(s_{t+1}))
 $$
 * considering both contraction mappings and temporal difference.
-  * let $q_{\pi}(s_t, a_t)$ be the temporal optimal state value
-  * let $r_{t+1} + \gamma * \max q_{\pi}(s_{t+1})$ be the iterative Bellman operator part
-* we know that by repeatly applying $\mathcal{T}^*$, $\mathcal{T}^*v$ will converge to $v_*$
+  * let q<sub>&pi;</sub>(s<sub>t</sub>, a<sub>t</sub>) be the temporal optimal state value
+  * let r<sub>t+1</sub> + &gamma; max q<sub>&pi;</sub>(s<sub>t+1</sub>) be the iterative Bellman operator part
+* we know that by repeatly applying T<sup>opt</sup>v will converge to v<sup>opt</sup>
 * So we have optimization problem
 $$
 \min ||\mathcal{T}^*v - v_*||
@@ -202,7 +205,7 @@ $$
 * so we define two networks
   * one policy network (also called as evaluation network)
   * one target network
-* we iterative update policy net to minimize $||\text{policynet} - \text{targetnet}||$ by training neural network.
+* we iterative update policy net to minimize ||policynet -targetnet|| by training neural network.
 * and periodically copy policy net to target net, due to temporal difference learning
 
 ## 6.2 Layers
@@ -244,3 +247,5 @@ $ python banana_navigation.py
 * Udacity Reinforcement Learning by Prof. Charles Isbell and Prof. Michael Littman
 * Tutorials from MorvanZhou
 * other blogs, articles, a lot
+* [write math in github readme](https://stackoverflow.com/questions/11256433/how-to-show-math-equations-in-general-githubs-markdownnot-githubs-blog)
+* [math render](https://www.codecogs.com/latex/eqneditor.php)
