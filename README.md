@@ -52,3 +52,6 @@ The task is episodic, and in order to solve the environment, your agent must get
 # 3. Reinforcement Learning Model
 
 * see [report.pdf](./report.pdf)
+
+# 4. ToDO
+* try Rainbow
